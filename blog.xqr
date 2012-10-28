@@ -1,0 +1,25 @@
+xquery version "1.0";
+declare namespace atom="http://www.w3.org/2005/Atom";
+declare namespace abe="https://github.com/LegoStormtroopr/XRXPress";
+declare namespace xhtml="http://www.w3.org/1999/xhtml";
+declare default element namespace "http://www.w3.org/1999/xhtml";
+
+import module namespace request="http://exist-db.org/xquery/request";
+import module namespace transform="http://exist-db.org/xquery/transform";
+
+declare option exist:serialize "method=html media-type=text/html indent=yes"; 
+
+let $params := <parameters><param name="content" value="./posts.xqr"/> </parameters>
+let $blog := doc('/blog.xml')
+let $posts := transform:transform($blog, xs:anyURI(concat("xmldb:exist://","/blog/Feed_to_Blog.xsl")), $params)
+    
+return document {
+        <html>
+            <head>
+                <title>{$blog/atom:feed/atom:title}</title>
+            </head>
+            <body>
+                {$posts}
+            </body>
+        </html>
+    }

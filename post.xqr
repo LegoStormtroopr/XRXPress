@@ -1,0 +1,35 @@
+xquery version "1.0";
+declare namespace atom="http://www.w3.org/2005/Atom";
+declare namespace abe="https://github.com/LegoStormtroopr/XRXPress";
+declare namespace xhtml="http://www.w3.org/1999/xhtml";
+declare namespace xf="http://www.w3.org/2002/xforms";
+declare default element namespace "http://www.w3.org/1999/xhtml";
+
+import module namespace request="http://exist-db.org/xquery/request";
+import module namespace transform="http://exist-db.org/xquery/transform";
+
+declare option exist:serialize "method=xml media-type=text/xml indent=yes omit-xml-declaration=no encoding=utf-8"; 
+
+let $params := <parameters></parameters>
+    
+let $blog := doc('/blog.xml')
+let $post-id := request:get-parameter("id", ())
+let $post := $blog//atom:entry[atom:id=$post-id]
+let $post := transform:transform($post, xs:anyURI(concat("xmldb:exist://","/blog/Entry_to_Post.xsl")),$params)
+
+return document {
+        processing-instruction {'xml-stylesheet'} {'href="http://sandbox.kidstrythisathome.com/dogsurvey/xsltforms-beta2/xsltforms/xsltforms.xsl" type="text/xsl"'},
+        <html>
+            <head>
+                <title>{$blog/atom:feed/atom:title}</title>
+                <xf:model>
+                    <xf:instance xmlns="">
+                        <abe:comment name="" email=""/>
+                    </xf:instance>
+                </xf:model>
+            </head>
+            <body>
+                {$post}
+            </body>
+        </html>
+    }

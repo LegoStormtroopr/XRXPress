@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="https://github.com/LegoStormtroopr/XRXPress"
+    xmlns="https://github.com/LegoStormtroopr/XRXPress"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xs:element name="comments">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="comment">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="email" xsi:type="emailAddress"/>
+                                <xs:attribute name="emailHash" xsi:type="emailAddressHash"/>
+                                <xs:attribute name="name" xsi:type="xs:string"/>
+                                <xs:attribute name="date" xsi:type="xs:dateTime"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:simpleType name="emailAddress">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
